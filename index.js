@@ -49,6 +49,27 @@ async function run() {
       res.send(result);
     });
 
+    app.put('/chocolates/:id', async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) };
+      const options = { upsert: true };
+      const updatedChocolate = req.body;
+      const chocolate = {
+        $set: {
+          photo: updatedChocolate.photo,
+          name: updatedChocolate.name,
+          country: updatedChocolate.country,
+          category: updatedChocolate.category,
+        },
+      };
+      const result = await chocolateCollection.updateOne(
+        filter,
+        chocolate,
+        options
+      );
+      res.send(result);
+    });
+
     app.delete('/chocolates/:id', async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
